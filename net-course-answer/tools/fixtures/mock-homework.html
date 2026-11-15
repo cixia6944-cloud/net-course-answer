@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>mock doHomeWorkNew</title>
+<style>
+  .TiMu { border: 1px solid #ddd; margin: 8px 0; padding: 8px; }
+  .font-cxsecret { font-family: monospace; }
+</style>
+</head>
+<body>
+<h1>模拟答题页(仅用于产物冒烟测试)</h1>
+<div class="TiMu newTiMu" data="q1">
+  <div class="Zy_TItle clearfix"><i class="fl">1.</i><span class="newZy_TItle">【单选题】</span></div>
+  <div class="fontLabel" data-flag="1">关于汇率的说法正确的是( )。</div>
+  <ul class="Zy_ulTop w-top">
+    <li class="before-after" role="radio" qid="q1" qtype="0" onclick="void 0"><span class="num_option_dx" data="A">A</span><a class="fl after">直接标价法下汇率上升表示本币升值</a></li>
+    <li class="before-after" role="radio" qid="q1" qtype="0" onclick="void 0"><span class="num_option_dx" data="B">B</span><a class="fl after">间接标价法下汇率上升表示本币升值</a></li>
+  </ul>
+  <input id="answerq1" type="hidden" value="">
+</div>
+<div class="TiMu newTiMu" data="q2">
+  <div class="Zy_TItle clearfix"><i class="fl">2.</i><span class="newZy_TItle">【多选题】</span></div>
+  <div class="fontLabel" data-flag="1">下列属于国际收支经常账户的有( )。</div>
+  <ul class="Zy_ulTop w-top">
+    <li class="before-after-checkbox" role="checkbox" qid="q2" qtype="1" aria-label="A 货物贸易选择" onclick="void 0"><span class="num_option_dx" data="A">A</span><a class="fl after">货物贸易</a></li>
+    <li class="before-after-checkbox" role="checkbox" qid="q2" qtype="1" aria-label="B 直接投资选择" onclick="void 0"><span class="num_option_dx" data="B">B</span><a class="fl after">直接投资</a></li>
+    <li class="before-after-checkbox" role="checkbox" qid="q2" qtype="1" aria-label="C 服务贸易选择" onclick="void 0"><span class="num_option_dx" data="C">C</span><a class="fl after">服务贸易</a></li>
+  </ul>
+  <input id="answerq2" type="hidden" value="">
+</div>
+<div style="margin:12px 0">
+  <a class="btnSubmit" onclick="btnBlueSubmit()">提交</a>
+  <a class="btnSave" onclick="noSubmit()">暂存</a>
+  <span id="submitTip" style="color:#888"></span>
+</div>
+
+<script>
+  // 模拟超星作业页的提交链路: btnBlueSubmit() 弹二次确认层 → 点「确定」调 submitCheckTimes() 真提交
+  window.btnBlueSubmit = function () {
+    if (document.querySelector('.layui-layer-btn0')) return;
+    const layer = document.createElement('div');
+    layer.className = 'layui-layer';
+    layer.innerHTML = '<div class="layui-layer-content">作业提交后不可修改, 确定提交?</div>' +
+      '<div class="layui-layer-btn"><a class="layui-layer-btn0" onclick="submitCheckTimes()">确定</a>' +
+      '<a class="layui-layer-btn1">取消</a></div>';
+    document.body.appendChild(layer);
+    document.getElementById('submitTip').textContent = '(确认层已弹出)';
+  };
+  window.submitCheckTimes = function () {
+    if (document.getElementById('doneTip')) return;
+    const layer = document.querySelector('.layui-layer');
+    if (layer) layer.remove();
+    const tip = document.createElement('div');
+    tip.id = 'doneTip';
+    tip.style.cssText = 'color:#0a7d33;font-weight:700';
+    tip.textContent = '作业已提交, 待批阅';
+    document.body.insertBefore(tip, document.body.firstChild);
+    document.getElementById('submitTip').textContent = '(已提交)';
+  };
+  window.noSubmit = function () {
+    document.getElementById('submitTip').textContent = '(已暂存)';
+  };
+
+  // 模拟超星页面的勾选行为(点选项 → 写 aria-checked + 隐藏域 input#answer<qid>),
+  // 这样本地无登录态自测能验证"真的勾上了"(适配器现在会回读校验).
+  document.addEventListener('click', (e) => {
+    const li = e.target.closest && e.target.closest('li[role=radio],li[role=checkbox]');
+    if (!li) return;
+    const qid = li.getAttribute('qid');
+    const qtype = li.getAttribute('qtype');
+    const letter = (li.querySelector('[data]') || {}).getAttribute && li.querySelector('[data]').getAttribute('data');
+    const box = document.querySelector('#answer' + qid);
+    if (qtype === '0') {
+      li.parentElement.querySelectorAll('li').forEach((x) => x.setAttribute('aria-checked', 'false'));
+      li.setAttribute('aria-checked', 'true');
+      if (box) box.value = letter || '';
+    } else {
+      const on = li.getAttribute('aria-checked') === 'true';
+      li.setAttribute('aria-checked', on ? 'false' : 'true');
+      if (box) {
+        const set = new Set(String(box.value || '').split('').filter(Boolean));
+        on ? set.delete(letter) : set.add(letter);
+        box.value = [...set].sort().join('');
+      }
+    }
+  });
+  window.__errors = [];
+  window.addEventListener('error', (e) => window.__errors.push(String(e.message || e.error)));
+  window.addEventListener('unhandledrejection', (e) => window.__errors.push('unhandledrejection: ' + String(e.reason)));
+</script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+{
+  "name": "net-course-answer",
+  "version": "0.12.7",
+  "private": true,
+  "type": "module",
+  "description": "专属网课答题插件(纯答题版):识别题目 → 答题桥作答 → 自动填选",
+  "scripts": {
+    "build": "node build.mjs",
+    "pretest": "node build.mjs",
+    "check": "node --check dist/net-course-answer.user.js",
+    "test": "node tools/font-decrypt-test.mjs && node tools/font-selftest.mjs && node tools/player-test.mjs && node tools/contract-test.mjs && node tools/cx-adapter-test.mjs && node tools/course-test.mjs && node tools/zhs-adapter-test.mjs && node tools/submit-test.mjs && node tools/panel-contract-test.mjs && node tools/harvest-test.mjs && node tools/ai-tutor-test.mjs && node tools/discuss-test.mjs && node tools/practice-test.mjs && node tools/bundle-smoke.mjs",
+    "serve:fixture": "node tools/serve-fixture.mjs 30145"
+  }
+}

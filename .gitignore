@@ -1,0 +1,32 @@
+# ---------- 侦察/抓取产物（含真实站点 URL 与会话参数，绝不入库） ----------
+情报/
+.scratch/
+net-course-answer/tools/.cache/
+
+# ---------- 依赖与构建产物 ----------
+node_modules/
+net-course-answer/dist/
+产物/
+
+# ---------- 运行时日志 ----------
+*.log
+answer-bridge/bridge.out.log
+answer-bridge/bridge.err.log
+
+# ---------- 本地配置与任何凭据文件 ----------
+answer-bridge/bridge.config.json
+.env
+*.env
+cookies*.json
+*cookie*.json
+*Cookie*.json
+*token*.json
+*token*.txt
+secrets*.json
+
+# ---------- 编辑器/系统垃圾 ----------
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp

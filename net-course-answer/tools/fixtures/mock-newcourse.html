@@ -1,0 +1,20 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><title>mock fanyav3 课程页</title>
+<style>body{font:13px/1.6 sans-serif}#box{border:1px solid #ddd;padding:6px;margin-top:8px}</style></head>
+<body>
+<h2>模拟新版泛雅3 课程页(章节列表在 iframe 里)</h2>
+<p>采集依据: 一手侦察记录(未随仓库分发) §一 —— 条目 <code>DIV.chapter_item[onclick=toOld(...)]</code>, 状态 <code>SPAN.catalog_task</code></p>
+<iframe id="list" src="mock-studentcourse.html?x=/mooc-ans/mycourse/studentcourse" style="width:100%;height:220px;border:1px solid #eee"></iframe>
+<div id="box">(还没点)</div>
+<script>
+  window.__errors = [];
+  window.addEventListener('error', (e) => window.__errors.push(String(e.message || e.error)));
+  window.addEventListener('unhandledrejection', (e) => window.__errors.push('unhandledrejection: ' + String(e.reason)));
+  // 模拟超星的页面函数: 点章节 → 跳到旧版 studentstudy
+  window.toOld = function (courseId, knowledgeId, clazzId, flag) {
+    document.getElementById('box').textContent = 'toOld(' + courseId + ',' + knowledgeId + ',' + clazzId + ',' + flag + ') → 跳旧版';
+    setTimeout(function () {
+      location.href = '/tools/fixtures/mock-studystudy.html?site=chaoxing.com&path=/mycourse/studentstudy&chapterId=' + knowledgeId;
+    }, 300);
+  };
+</script>
+</body></html>
